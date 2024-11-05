@@ -14,6 +14,8 @@ const Reserva_Salas = () => {
   const [showReservationDetails, setShowReservationDetails] = useState(false);
   const [reservationSuccess, setReservationSuccess] = useState(false);
   const [reservationCode, setReservationCode] = useState('');
+  const [reservas, setReservas] = useState([]); 
+  const [editReservaId, setEditReservaId] = useState(null);
 
   const handleLocationChange = (e) => setLocation(e.target.value);
   const handleCategoryChange = (e) => {
@@ -63,7 +65,75 @@ const Reserva_Salas = () => {
     // Simulate reservation success and generate a reservation code
     setReservationSuccess(true);
     setReservationCode(`RES-${Math.floor(Math.random() * 10000)}`);
+    const newReserva = {
+      id: Date.now(), // Genera un ID único
+      location,
+      category,
+      capacity,
+      accessible,
+      powerAvailable,
+      date,
+      selectedBlocks,
+      reservationCode: `RES-${Math.floor(Math.random() * 10000)}`,
+    };
+    if (editReservaId) {
+      setReservas(prev =>
+        prev.map(reserva => reserva.id === editReservaId ? newReserva : reserva)
+      );
+      setEditReservaId(null);
+    } else {
+      setReservas([...reservas, newReserva]);
+    }
+    setReservationSuccess(true);
+    setTimeout(() => {
+      setReservationSuccess(false);
+      resetReservationForm();
+    }, 3000);
+
   };
+  const resetReservationForm = () => {
+    setLocation('');
+    setCategory('');
+    setCapacity('');
+    setAccessible(false);
+    setPowerAvailable(false);
+    setDate('');
+    setSelectedBlocks([]);
+};
+
+  const handleEditReservation = (id) => {
+    const reservaToEdit = reservas.find(reserva => reserva.id === id);
+    setLocation(reservaToEdit.location);
+    setCategory(reservaToEdit.category);
+    setCapacity(reservaToEdit.capacity);
+    setAccessible(reservaToEdit.accessible);
+    setPowerAvailable(reservaToEdit.powerAvailable);
+    setDate(reservaToEdit.date);
+    setSelectedBlocks(reservaToEdit.selectedBlocks);
+    setEditReservaId(id);
+    setShowReservationDetails(false);
+    setShowTable(true);
+  };
+
+  const handleDeleteReservation = (id) => {
+    setReservas((prev) => prev.filter((reserva) => reserva.id !== id));
+    setShowReservationDetails(false); // Cierra el detalle de reserva si estaba abierto
+    handleBack();
+  };
+
+  const renderReservationList = () => (
+    <div>
+      <h2>Mis Reservas</h2>
+      {reservas.map((reserva) => (
+        <div key={reserva.id}>
+          <p>{`Reserva ${reserva.reservationCode} - ${reserva.date}`}</p>
+          <button onClick={() => handleEditReservation(reserva.id)}>Editar</button>
+          <button onClick={() => handleDeleteReservation(reserva.id)}>Eliminar</button>
+        </div>
+      ))}
+    </div>
+  );
+
 
   const renderTable = () => {
     const hours = ['12:00', '13:00', '14:00', '15:00', '16:00', '17:00', '18:00', '19:00', '20:00', '21:00', '22:00', '23:00'];
@@ -257,8 +327,11 @@ const Reserva_Salas = () => {
         ) : (
           renderReservationDetails()
         )
+          
       )}
+      {renderReservationList()}
     </div>
+    
   );
 };
 
