@@ -97,15 +97,17 @@ export const HomePage = () => {
     padding: '5px', // Reduced padding to make the footer thinner
     textAlign: 'center',
     marginTop: '50px',
-    width: '100%', // Ensure the footer spans the full width
     position: 'fixed', // Fix the footer at the bottom
     bottom: '0', // Align it to the bottom
     left: '0', // Align it to the left
-    right: '0' // Align it to the right
+    right: '0', // Align it to the right
+    display: 'flex',
+    justifyContent: 'space-between',
+    alignItems: 'center',
+    fontSize: '12px' // Reduced font size
   };
 
   const containerStyle = {
-    overflowY: 'auto',
     height: '100vh',
     padding: '20px'
   };
@@ -128,12 +130,12 @@ export const HomePage = () => {
 
   return (
     <div style={containerStyle}>
-      <div style={{ marginLeft: '250px', display: 'flex', alignItems: 'center' }}> {/* Move everything to the right */}
+      <div style={{ marginLeft: '250px', display: 'flex', alignItems: 'center', marginTop: '-80px' }}> {/* Move everything to the right */}
         <button style={buttonStyle} onClick={handlePrestamoClick}>Prestamo</button>
         <button style={{ ...buttonStyle, marginRight: '0' }} onClick={handleReservaSalasClick}>Reserva salas</button>
         <img src={horario} alt="Horario" style={horarioStyle} /> {/* Add horario image */}
       </div>
-      <div style={{ marginLeft: '250px' , marginTop: '-35px'}}>
+      <div style={{ marginLeft: '250px' , marginTop: '-45px'}}>
         <div style={{ display: 'flex', marginTop: '12.5px' }}> {/* 10px * 1.25 */}
           <a href="#" style={{ marginRight: '25px' }}>
             <img src={repositoriodigital} alt="Repositorio Digital" style={imageStyle} />
@@ -162,12 +164,22 @@ export const HomePage = () => {
         </div>
       </div>
       <footer style={footerStyle}>
-        <p>Contacta con nosotros en nuestras redes sociales:</p>
-        <p>
-          <a href="https://facebook.com/bibliotecaUSM" style={{ color: 'white', marginRight: '10px' }}>Facebook</a>
-          <a href="https://twitter.com/bibliotecaUSM" style={{ color: 'white', marginRight: '10px' }}>Twitter</a>
-          <a href="https://instagram.com/bibliotecaUSM" style={{ color: 'white' }}>Instagram</a>
-        </p>
+        <div style={{ flex: 1, textAlign: 'left', paddingLeft: '10px' }}>
+          <p>© Universidad Técnica Federico Santa María</p>
+          <p>Avenida España 1680, Valparaíso</p>
+        </div>
+        <div style={{ flex: 1 }}>
+          <p>Contacta con nosotros en nuestras redes sociales:</p>
+          <p>
+            <a href="https://facebook.com/bibliotecaUSM" style={{ color: 'white', marginRight: '10px' }}>Facebook</a>
+            <a href="https://twitter.com/bibliotecaUSM" style={{ color: 'white', marginRight: '10px' }}>Twitter</a>
+            <a href="https://instagram.com/bibliotecaUSM" style={{ color: 'white' }}>Instagram</a>
+          </p>
+        </div>
+        <div style={{ flex: 1, textAlign: 'right', paddingRight: '10px' }}>
+          <p>Sitio web administrado por</p>
+          <p>Dirección de Información y Documentación Bibliográfica Institucional</p>
+        </div>
       </footer>
     </div>
   );

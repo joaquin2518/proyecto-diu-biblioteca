@@ -14,6 +14,9 @@ const Reserva_Salas = () => {
   const [showReservationDetails, setShowReservationDetails] = useState(false);
   const [reservationSuccess, setReservationSuccess] = useState(false);
   const [reservationCode, setReservationCode] = useState('');
+  const [reservations, setReservations] = useState([]);
+  const [isEditing, setIsEditing] = useState(false);
+  const [editingReservationCode, setEditingReservationCode] = useState('');
 
   const handleLocationChange = (e) => setLocation(e.target.value);
   const handleCategoryChange = (e) => {
@@ -28,47 +31,79 @@ const Reserva_Salas = () => {
   const handleAccessibleChange = (e) => setAccessible(e.target.checked);
   const handlePowerAvailableChange = (e) => setPowerAvailable(e.target.checked);
   const handleDateChange = (e) => setDate(e.target.value);
-
   const handleSubmit = (e) => {
-    e.preventDefault();
-    if (!location || !category || (category === 'grupal' && !capacity) || !date) {
-      setError('Por favor, complete todos los campos requeridos.');
-      return;
-    }
-    setError('');
-    setShowTable(true);
-  };
-
+      e.preventDefault();
+      if (!location || !category || (category === 'grupal' && !capacity) || !date) {
+        setError('Por favor, complete todos los campos requeridos.');
+        return;
+      }
+      setError('');
+      setShowTable(true);
+      setReservationSuccess(false); // Reset reservation success state
+    };
   const handleBack = () => {
     setShowTable(false);
     setSelectedBlocks([]);
     setDate('');
   };
-
   const handleBlockClick = (room, hour) => {
-    const block = `${room}-${hour}`;
-    if (selectedBlocks.includes(block)) {
-      setSelectedBlocks(selectedBlocks.filter(b => b !== block));
-    } else if (selectedBlocks.length < 2) {
-      setSelectedBlocks([...selectedBlocks, block]);
-    }
-  };
-
+      const block = `${room}-${hour}`;
+      if (reservedBlocks.includes(block)) {
+        return; // Do nothing if the block is reserved
+      }
+      if (selectedBlocks.includes(block)) {
+        setSelectedBlocks(selectedBlocks.filter(b => b !== block));
+      } else if (selectedBlocks.length < 2) {
+        setSelectedBlocks([...selectedBlocks, block]);
+      }
+    };
   const handleContinue = () => {
     setShowTable(false);
     setShowReservationDetails(true);
   };
-
   const handleConfirmReservation = () => {
-    // Simulate reservation success and generate a reservation code
+    const newReservation = {
+      location,
+      category,
+      capacity,
+      accessible,
+      powerAvailable,
+      date,
+      selectedBlocks,
+      reservationCode: isEditing ? editingReservationCode : `RES-${Math.floor(Math.random() * 10000)}`
+    };
+    if (isEditing) {
+      setReservations(reservations.map(reservation => reservation.reservationCode === editingReservationCode ? newReservation : reservation));
+      setIsEditing(false);
+      setEditingReservationCode('');
+    } else {
+      setReservations([...reservations, newReservation]);
+    }
     setReservationSuccess(true);
-    setReservationCode(`RES-${Math.floor(Math.random() * 10000)}`);
+    setReservationCode(newReservation.reservationCode);
   };
-
+  const handleDeleteReservation = (code) => {
+    if (window.confirm('¿Seguro que quiere eliminar esta reserva?')) {
+      setReservations(reservations.filter(reservation => reservation.reservationCode !== code));
+    }
+  };
+const handleEditReservation = (reservation) => {
+  setLocation(reservation.location);
+  setCategory(reservation.category);
+  setCapacity(reservation.capacity);
+  setAccessible(reservation.accessible);
+  setPowerAvailable(reservation.powerAvailable);
+  setDate(reservation.date);
+  setSelectedBlocks(reservation.selectedBlocks);
+  setIsEditing(true);
+  setEditingReservationCode(reservation.reservationCode);
+  setShowTable(false);
+  setShowReservationDetails(false);
+  setShowTable(true); // Show the form for editing
+};
   const renderTable = () => {
     const hours = ['12:00', '13:00', '14:00', '15:00', '16:00', '17:00', '18:00', '19:00', '20:00', '21:00', '22:00', '23:00'];
     const rooms = ['Sala 01', 'Sala 02', 'Sala 03', 'Sala 04', 'Sala 05', 'Sala 06', 'Sala 07', 'Sala 08', 'Sala 09', 'Sala 10', 'Sala 11'];
-
     return (
       <table style={{ width: '100%', borderCollapse: 'collapse', border: '1px solid black' }}>
         <thead>
@@ -100,19 +135,16 @@ const Reserva_Salas = () => {
       </table>
     );
   };
-
   const getBlockColor = (room, hour) => {
     const block = `${room}-${hour}`;
     if (selectedBlocks.includes(block)) return 'orange';
     if (reservedBlocks.includes(block)) return 'red';
     return 'green';
   };
-
   function generateReservedBlocks() {
     const hours = ['12:00', '13:00', '14:00', '15:00', '16:00', '17:00', '18:00', '19:00', '20:00', '21:00', '22:00', '23:00'];
     const rooms = ['Sala 01', 'Sala 02', 'Sala 03', 'Sala 04', 'Sala 05', 'Sala 06', 'Sala 07', 'Sala 08', 'Sala 09', 'Sala 10', 'Sala 11'];
     const reservedBlocks = [];
-
     rooms.forEach(room => {
       hours.forEach(hour => {
         if (Math.random() < 0.2) { // 20% chance to reserve a block
@@ -120,10 +152,8 @@ const Reserva_Salas = () => {
         }
       });
     });
-
     return reservedBlocks;
   }
-
   const renderSummary = () => {
     return (
       <div style={{ marginTop: '20px', textAlign: 'left' }}>
@@ -138,7 +168,6 @@ const Reserva_Salas = () => {
       </div>
     );
   };
-
   const renderReservationDetails = () => {
     return (
       <div style={{ textAlign: 'left', width: '50%' }}>
@@ -169,11 +198,35 @@ const Reserva_Salas = () => {
       </div>
     );
   };
-
+  
+  const renderReservations = () => {
+    return (
+      <div style={{ marginTop: '50px', width: '50%' }}>
+        <h2>Reservas Guardadas</h2>
+        {reservations.length === 0 ? (
+          <p>Usted no tiene reservas realizadas</p>
+        ) : (
+          reservations.map((reservation, index) => (
+            <div key={index} style={{ border: '1px solid black', padding: '10px', marginBottom: '10px' }}>
+              <p><strong>Código de Reserva:</strong> {reservation.reservationCode}</p>
+              <p><strong>Localización:</strong> {reservation.location}</p>
+              <p><strong>Categoría:</strong> {reservation.category}</p>
+              {reservation.category === 'grupal' && <p><strong>Capacidad:</strong> {reservation.capacity}</p>}
+              <p><strong>Accesible:</strong> {reservation.accessible ? 'Sí' : 'No'}</p>
+              <p><strong>Power Available:</strong> {reservation.powerAvailable ? 'Sí' : 'No'}</p>
+              <p><strong>Fecha:</strong> {reservation.date}</p>
+              <p><strong>Bloques Seleccionados:</strong> {reservation.selectedBlocks.join(', ')}</p>
+              <button onClick={() => handleDeleteReservation(reservation.reservationCode)} style={{ fontSize: '20px', padding: '10px 20px', backgroundColor: 'red', color: 'white', borderRadius: '10px' }}>Eliminar</button>
+              <button onClick={() => handleEditReservation(reservation)} style={{ fontSize: '20px', padding: '10px 20px', backgroundColor: '#033655', color: 'white', borderRadius: '10px', marginLeft: '10px' }}>Modificar</button>
+            </div>
+          ))
+        )}
+      </div>
+    );
+  };
   return (
     <div style={{ display: 'flex', justifyContent: 'flex-start', alignItems: 'center', height: '100vh', flexDirection: 'column', marginTop: '50px' }}>
-      <h1>Reserva</h1>
-      <p>Complete el formulario para realizar la reserva:</p>
+      <h1>Reserva</h1><p>Complete el formulario para realizar la reserva:</p>
       {!showTable && !showReservationDetails ? (
         <form onSubmit={handleSubmit} style={{ textAlign: 'center', width: '50%' }}>
           {error && <p style={{ color: 'red' }}>{error}</p>}
@@ -190,11 +243,28 @@ const Reserva_Salas = () => {
           </div>
           <div style={{ marginBottom: '20px', display: 'flex', alignItems: 'center' }}>
             <label style={{ fontSize: '20px', marginRight: '10px' }}>Categoría:</label>
-            <select value={category} onChange={handleCategoryChange} style={{ fontSize: '20px', width: '100%' }}>
-              <option value="">Seleccione una categoría</option>
-              <option value="individual">Estudio Individual</option>
-              <option value="grupal">Estudio Grupal</option>
-            </select>
+            <div style={{ display: 'flex', alignItems: 'center' }}>
+              <label style={{ fontSize: '20px', marginRight: '10px' }}>
+                <input
+                  type="radio"
+                  value="individual"
+                  checked={category === 'individual'}
+                  onChange={handleCategoryChange}
+                  style={{ transform: 'scale(1.5)', marginRight: '10px' }}
+                />
+                Estudio Individual
+              </label>
+              <label style={{ fontSize: '20px', marginRight: '10px' }}>
+                <input
+                  type="radio"
+                  value="grupal"
+                  checked={category === 'grupal'}
+                  onChange={handleCategoryChange}
+                  style={{ transform: 'scale(1.5)', marginRight: '10px' }}
+                />
+                Estudio Grupal
+              </label>
+            </div>
           </div>
           {category === 'grupal' && (
             <div style={{ marginBottom: '20px', display: 'flex', alignItems: 'center' }}>
@@ -258,8 +328,10 @@ const Reserva_Salas = () => {
           renderReservationDetails()
         )
       )}
+      {renderReservations()}
     </div>
   );
 };
 
 export default Reserva_Salas;
+

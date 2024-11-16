@@ -1,6 +1,5 @@
 import React from 'react'
 import { NavLink } from 'react-router-dom'
-import logo from '../assets/logo.png'
 
 export const NavBar = () => {
   const navLinkClass = ({ isActive }) => {
@@ -9,15 +8,15 @@ export const NavBar = () => {
     return classes.join(' ')
   }
   const linkStyle = {
-    backgroundColor: '#AD5D4E', // Coffee color
+    backgroundColor: '#033655', // Coffee color
     color: '#FFFFFF', // White color for text
     padding: '10px',
     borderRadius: '5px',
     margin: '0 5px'
   }
   return (
-    <nav className='nav-bar' style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
-      <img src={logo} alt="Logo" style={{ height: '50px', marginRight: '20px' }} />
+    <nav className='nav-bar' style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginTop: '10px' }}>
+
       <div style={{ display: 'flex' }}>
         <NavLink
           className={navLinkClass}

@@ -56,8 +56,8 @@ const Prestamos = () => {
   };
 
   return (
-    <div style={{ textAlign: 'center' }}>
-      <h1 style={{ fontSize: '2em' }}>Buscador de Libros</h1>
+    <div style={{ textAlign: 'center', padding: '20px', backgroundColor: '#f5f5f5' }}>
+      <h1 style={{ fontSize: '2em', color: '#033655' }}>Buscador de Libros</h1>
       {!selectedBook ? (
         <>
           <button 
@@ -78,12 +78,12 @@ const Prestamos = () => {
               placeholder="Buscar..." 
               value={searchTerm} 
               onChange={(e) => setSearchTerm(e.target.value)} 
-              style={{ fontSize: '1em', padding: '5px' }}
+              style={{ fontSize: '1em', padding: '5px', borderRadius: '5px', border: '1px solid #ccc' }}
             />
             <select 
               value={filter} 
               onChange={(e) => setFilter(e.target.value)} 
-              style={{ fontSize: '1em', padding: '5px', marginLeft: '10px' }}
+              style={{ fontSize: '1em', padding: '5px', marginLeft: '10px', borderRadius: '5px', border: '1px solid #ccc' }}
             >
               <option value="title">Título</option>
               <option value="author">Autor</option>
@@ -94,26 +94,26 @@ const Prestamos = () => {
             </select>
             <button 
               onClick={() => setSearchTerm('')} 
-              style={{ fontSize: '1em', padding: '5px', marginLeft: '10px', backgroundColor: '#033655', color: 'white' }}
+              style={{ fontSize: '1em', padding: '5px', marginLeft: '10px', backgroundColor: '#033655', color: 'white', borderRadius: '5px' }}
             >
               Limpiar
             </button>
           </div>
-          <table style={{ width: '100%', fontSize: '1.2em', textAlign: 'left' }}>
+          <table style={{ width: '100%', fontSize: '1.2em', textAlign: 'left', borderCollapse: 'collapse' }}>
             <thead>
               <tr>
-                <th>Título</th>
-                <th>Autor</th>
-                <th>Tipo de Material</th>
-                <th>Formato</th>
-                <th>Forma Literaria</th>
-                <th>Disponibilidad</th>
+                <th onClick={() => setFilter('title')}>Título</th>
+                <th onClick={() => setFilter('author')}>Autor</th>
+                <th onClick={() => setFilter('type')}>Tipo de Material</th>
+                <th onClick={() => setFilter('format')}>Formato</th>
+                <th onClick={() => setFilter('literaryForm')}>Forma Literaria</th>
+                <th onClick={() => setFilter('available')}>Disponibilidad</th>
                 <th>Reserva</th>
               </tr>
             </thead>
             <tbody>
               {filteredBooks.map((book, index) => (
-                <tr key={index} style={{ backgroundColor: index % 2 === 0 ? 'white' : 'lightgrey' }}>
+                <tr key={index} style={{ backgroundColor: book.available ? '#f5f5f5' : '#d3d3d3', cursor: 'pointer' }}>
                   <td>{book.title}</td>
                   <td>{book.author}</td>
                   <td>{book.type}</td>
@@ -122,7 +122,7 @@ const Prestamos = () => {
                   <td>{book.available ? 'Disponible' : 'No Disponible'}</td>
                   <td>
                     <button 
-                      style={{ backgroundColor: book.available ? '#033655' : 'grey', color: 'white' }} 
+                      style={{ backgroundColor: book.available ? '#033655' : '#d3d3d3', color: 'white', borderRadius: '5px', padding: '5px 10px' }} 
                       disabled={!book.available}
                       onClick={() => handleReserve(book)}
                     >
@@ -142,7 +142,7 @@ const Prestamos = () => {
               <p>Código de Reserva: {reservationCode}</p>
               <button 
                 onClick={handleBackToSearch} 
-                style={{ fontSize: '1em', padding: '10px 20px', backgroundColor: '#033655', color: 'white' }}
+                style={{ fontSize: '1em', padding: '10px 20px', backgroundColor: '#033655', color: 'white', borderRadius: '5px' }}
               >
                 Volver a la Búsqueda
               </button>
@@ -159,19 +159,19 @@ const Prestamos = () => {
                 type="date" 
                 value={reservationDate} 
                 onChange={(e) => setReservationDate(e.target.value)} 
-                style={{ fontSize: '1em', padding: '5px', margin: '10px 0' }}
+                style={{ fontSize: '1em', padding: '5px', margin: '10px 0', borderRadius: '5px', border: '1px solid #ccc' }}
                 max={getMaxReservationDate()}
               />
-              <p>Fecha de entrega máxima: {getMaxReservationDate()}</p>
+              <p>Fecha de entrega máxima: <strong style={{ backgroundColor: '#E0BF53' }}>{getMaxReservationDate()}</strong></p>
               <button 
                 onClick={handleConfirmReservation} 
-                style={{ fontSize: '1em', padding: '10px 20px', backgroundColor: '#033655', color: 'white' }}
+                style={{ fontSize: '1em', padding: '10px 20px', backgroundColor: '#033655', color: 'white', borderRadius: '5px' }}
               >
                 Confirmar Reserva
               </button>
               <button 
                 onClick={handleBackToSearch} 
-                style={{ fontSize: '1em', padding: '10px 20px', backgroundColor: '#033655', color: 'white', marginLeft: '10px' }}
+                style={{ fontSize: '1em', padding: '10px 20px', backgroundColor: '#033655', color: 'white', marginLeft: '10px', borderRadius: '5px' }}
               >
                 Volver
               </button>
