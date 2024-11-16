@@ -327,9 +327,11 @@ const handleEditReservation = (reservation) => {
         ) : (
           renderReservationDetails()
         )
+          
       )}
       {renderReservations()}
     </div>
+    
   );
 };
 
