@@ -170,35 +170,39 @@ const handleEditReservation = (reservation) => {
   };
   const renderReservationDetails = () => {
     return (
-      <div style={{ textAlign: 'left', width: '50%' }}>
-        <button onClick={() => setShowReservationDetails(false)} style={{ fontSize: '20px', padding: '10px 20px', backgroundColor: '#033655', color: 'white', borderRadius: '10px', marginBottom: '20px' }}>Nueva reserva</button>
-        <h2>Detalles de la reserva</h2>
-        <p>La reserva debe completarse antes de las 17:50 el {date}. Si no se completa, la reserva quedará disponible para otros usuarios.</p>
-        <div style={{ marginBottom: '20px' }}>
-          <h3>Información de la Reserva</h3>
-          <p><strong>Localización:</strong> {location}</p>
-          <p><strong>Categoría:</strong> {category}</p>
-          {category === 'grupal' && <p><strong>Capacidad:</strong> {capacity}</p>}
-          <p><strong>Accesible:</strong> {accessible ? 'Sí' : 'No'}</p>
-          <p><strong>Power Available:</strong> {powerAvailable ? 'Sí' : 'No'}</p>
-          <p><strong>Fecha:</strong> {date}</p>
-          <p><strong>Bloques Seleccionados:</strong> {selectedBlocks.join(', ')}</p>
+      <div style={{ textAlign: 'left', width: '40%', fontSize: '14px' }}>
+        <button onClick={() => setShowReservationDetails(false)} style={{ fontSize: '16px', padding: '8px 16px', backgroundColor: '#033655', color: 'white', borderRadius: '8px', marginBottom: '15px' }}>Nueva reserva</button>
+        <h2 style={{ fontSize: '18px', marginBottom: '10px' }}>Detalles de la reserva</h2>
+        <p style={{ marginBottom: '10px' }}>La reserva debe completarse antes de las 17:50 el {date}. Si no se completa, la reserva quedará disponible para otros usuarios.</p>
+        <div style={{ marginBottom: '15px' }}>
+          <h3 style={{ fontSize: '16px', marginBottom: '5px' }}>Información de la Reserva</h3>
+          <ul style={{ paddingLeft: '20px', marginBottom: '10px', listStyleType: 'none' }}>
+            <li>- <strong>Localización:</strong> {location}</li>
+            <li>- <strong>Categoría:</strong> {category}</li>
+            {category === 'grupal' && <li>- <strong>Capacidad:</strong> {capacity}</li>}
+            <li>- <strong>Accesible:</strong> {accessible ? 'Sí' : 'No'}</li>
+            <li>- <strong>Power Available:</strong> {powerAvailable ? 'Sí' : 'No'}</li>
+            <li>- <strong>Fecha:</strong> {date}</li>
+            <li>- <strong>Bloques Seleccionados:</strong> {selectedBlocks.join(', ')}</li>
+          </ul>
         </div>
-        <div style={{ marginBottom: '20px' }}>
-          <h3>Términos y Condiciones</h3>
-          <p>El servicio es para alumnos regulares de la universidad.</p>
-          <p>Las reservas son diarias y se pueden hacer de 8:15 a 20:00.</p>
-          <p>Se pueden reservar hasta 2 bloques de 2 horas al día.</p>
-          <p>La sala debe ser usada dentro de 15 minutos de la hora reservada o será liberada.</p>
-          <p>Es necesario retirar un kit con borrador, plumón y llave en el área de RRTT.</p>
-          <p>Mantener un volumen moderado y está prohibido traer mesas y sillas adicionales.</p>
+        <div style={{ marginBottom: '15px' }}>
+          <h3 style={{ fontSize: '16px', marginBottom: '5px' }}>Términos y Condiciones</h3>
+          <ul style={{ paddingLeft: '20px', marginBottom: '10px' }}>
+            <li>El servicio es para alumnos regulares de la universidad.</li>
+            <li>Las reservas son diarias y se pueden hacer de 8:15 a 20:00.</li>
+            <li>Se pueden reservar hasta 2 bloques de 2 horas al día.</li>
+            <li>La sala debe ser usada dentro de 15 minutos de la hora reservada o será liberada.</li>
+            <li>Es necesario retirar un kit con borrador, plumón y llave en el área de RRTT.</li>
+            <li>Mantener un volumen moderado y está prohibido traer mesas y sillas adicionales.</li>
+          </ul>
         </div>
-        <button style={{ fontSize: '20px', padding: '10px 20px', backgroundColor: 'red', color: 'white', borderRadius: '10px' }}>Volver</button>
-        <button onClick={handleConfirmReservation} style={{ fontSize: '20px', padding: '10px 20px', backgroundColor: '#033655', color: 'white', borderRadius: '10px', marginLeft: '10px' }}>Realizar reserva</button>
+        <button style={{ fontSize: '16px', padding: '8px 16px', backgroundColor: 'red', color: 'white', borderRadius: '8px' }}>Volver</button>
+        <button onClick={handleConfirmReservation} style={{ fontSize: '16px', padding: '8px 16px', backgroundColor: '#033655', color: 'white', borderRadius: '8px', marginLeft: '8px' }}>Realizar reserva</button>
       </div>
     );
   };
-  
+
   const renderReservations = () => {
     return (
       <div style={{ marginTop: '50px', width: '50%' }}>
@@ -336,4 +340,3 @@ const handleEditReservation = (reservation) => {
 };
 
 export default Reserva_Salas;
-
